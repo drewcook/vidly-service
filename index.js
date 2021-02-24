@@ -1,3 +1,4 @@
+const debug = require('debug')('vidly:startup');
 const config = require('config');
 const express = require('express');
 const Joi = require('joi');
@@ -30,7 +31,7 @@ console.log('Mail Password: ' + config.get('mail.password'));
 
 if (isDevelopment) {
   app.use(morgan('tiny')); // a logging middleware
-  console.log('Morgan enabled...');
+  debug('Morgan enabled...');
 }
 
 // Custom middleware functions, called in sequence
