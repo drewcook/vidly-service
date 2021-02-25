@@ -20,8 +20,8 @@ const movieSchema = mongoose.Schema({
   title: {
     type: String,
     required: true,
-    minLength: 1,
-    maxLength: 255,
+    minLength: 5,
+    maxLength: 50,
   },
   genre: {
     type: String,
@@ -49,19 +49,11 @@ router.get('/', async (req, res) => {
 
 // Get single movie
 router.get('/:id', async (req, res) => {
-  try {
     const movie = await Movie.findById(req.params.id);
 
     if (!movie) return res.status(404).send(notFoundMsg);
 
-    return res.send(movie);
-  }
-  catch (ex) {
-    for (field in ex.errors) {
-      console.log(ex.errors[field].message);
-    }
-    return res.status(500).send(ex.errors);
-  }
+    res.send(movie);
 });
 
 // Create movie
@@ -96,7 +88,9 @@ router.put('/:id', async (req, res) => {
       $set: { title, genre },
     }, { new: true });
 
-    return res.send(updatedMovie);
+    if (!updatedMovie) return res.status(404).send(notFoundMsg);
+
+    res.send(updatedMovie);
   }
   catch (ex) {
     for (field in ex.errors) {
@@ -111,7 +105,8 @@ router.delete('/:id', async (req, res) => {
   try {
     const movie = await Movie.findByIdAndRemove(req.params.id);
     if (!movie) return res.status(404).send(notFoundMsg);
-    return res.send(movie);
+
+    res.send(movie);
   }
   catch (ex) {
     for (field in ex.errors) {

@@ -6,6 +6,7 @@ const morgan = require('morgan');
 const logger = require('./middleware/logger');
 const homepage = require('./routes/homepage');
 const movies = require('./routes/movies');
+const customers = require('./routes/customers');
 const mongoose = require('mongoose');
 
 // Connect to the local mongoDB instance
@@ -44,6 +45,7 @@ app.use(helmet());  // sets headers for requests
 // Use routes
 app.use('/', homepage);
 app.use('/api/movies', movies);
+app.use('/api/customers', customers);
 
 // Configuration
 debug(config)
