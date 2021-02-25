@@ -8,6 +8,16 @@ const homepage = require('./routes/homepage');
 const movies = require('./routes/movies');
 const mongoose = require('mongoose');
 
+// Connect to the local mongoDB instance
+mongoose.connect('mongodb://localhost/vidly', {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+  useFindAndModify: false,
+  useCreateIndex: true,
+})
+  .then(() => console.log('Connected to MongoDB...'))
+  .catch(err => console.error('Could not connect to MongoDB...', err));
+
 // Create server
 const app = express();
 const isDevelopment = app.get('env') === 'development';
@@ -35,11 +45,11 @@ app.use(helmet());  // sets headers for requests
 app.use('/', homepage);
 app.use('/api/movies', movies);
 
-
 // Configuration
+debug(config)
 debug('Application Name: ' + config.get('name'));
 debug('Mail Server: ' + config.get('mail.host'));
-debug('Mail Password: ' + config.get('mail.password'));
+// debug('Mail Password: ' + config.get('mail.password'));
 
 if (isDevelopment) {
   app.use(morgan('tiny')); // a logging middleware

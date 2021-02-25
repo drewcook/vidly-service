@@ -1,5 +1,6 @@
 const express = require('express');
 const Joi = require('joi');
+const mongoose = require('mongoose');
 
 // Setup the router
 const router = express.Router();
@@ -14,82 +15,110 @@ const validateMovie = (movie) => {
   return schema.validate(movie);
 };
 
-const movies = [
-  {
-    id: 1,
-    title: 'Forrest Gump',
-    genre: 'drama',
+// Schema
+const movieSchema = mongoose.Schema({
+  title: {
+    type: String,
+    required: true,
+    minLength: 1,
+    maxLength: 255,
   },
-  {
-    id: 2,
-    title: 'The Hurt Locker',
-    genre: 'action',
+  genre: {
+    type: String,
+    required: true,
+    enum: ['action', 'adventure', 'comedy', 'drama', 'documentary', 'horror', 'thriller']
   },
-  {
-    id: 3,
-    title: 'Finding Nemo',
-    genre: 'family',
-  },
-  {
-    id: 4,
-    title: 'Saving Private Ryan',
-    genre: 'action',
-  },
-];
+});
+const Movie = mongoose.model('Movie', movieSchema);
 
 const notFoundMsg = 'The movie with the given ID was not found.';
 
 // Get all movies
-router.get('/', (req, res) => {
-  res.send(movies);
+router.get('/', async (req, res) => {
+  try {
+    const movies = await Movie.find().sort({ name: 1 });
+    return res.send(movies);
+  }
+  catch (ex) {
+    for (field in ex.errors) {
+      console.log(ex.errors[field].message);
+    }
+    return res.status(500).send(ex.errors);
+  }
 });
 
 // Get single movie
-router.get('/:id', (req, res) => {
-  const movie = movies.find(m => m.id === parseInt(req.params.id));
-  if (!movie) return res.status(404).send(notFoundMsg);
+router.get('/:id', async (req, res) => {
+  try {
+    const movie = await Movie.findById(req.params.id);
 
-  res.send(movie);
+    if (!movie) return res.status(404).send(notFoundMsg);
+
+    return res.send(movie);
+  }
+  catch (ex) {
+    for (field in ex.errors) {
+      console.log(ex.errors[field].message);
+    }
+    return res.status(500).send(ex.errors);
+  }
 });
 
 // Create movie
-router.post('/', (req, res) => {
+router.post('/', async (req, res) => {
   const { error } = validateMovie(req.body);
   if (error) return res.status(400).send(error.details[0].message);
 
-  const movie = {
-    id: movies.length + 1,
+  const movie = new Movie({
     ...req.body,
-  };
+  });
 
-  movies.push(movie);
-
-  res.send(movie);
+  try {
+    const result = await movie.save();
+    return res.send(result);
+  }
+  catch (ex) {
+    for (field in ex.errors) {
+      console.log(ex.errors[field].message);
+    }
+    return res.status(500).send(ex.errors);
+  }
 });
 
 // Update movie
-router.put('/:id', (req, res) => {
-  const movie = movies.find(m => m.id === parseInt(req.params.id));
-  if (!movie) return res.status(404).send(notFoundMsg);
+router.put('/:id', async (req, res) => {
+  try {
+    const { error } = validateMovie(req.body);
+    if (error) return res.status(400).send(error.details[0].message);
 
-  const { error } = validateMovie(req.body);
-  if (error) return res.status(400).send(error.details[0].message);
+    const { title, genre } = req.body;
+    const updatedMovie = await Movie.findByIdAndUpdate(req.params.id, {
+      $set: { title, genre },
+    }, { new: true });
 
-  movie.title = req.body.title;
-  movie.genre = req.body.genre;
-
-  res.send(movie);
+    return res.send(updatedMovie);
+  }
+  catch (ex) {
+    for (field in ex.errors) {
+      console.log(ex.errors[field].message);
+    }
+    return res.status(500).send(ex.errors);
+  }
 });
 
 // Delete movie
-router.delete('/:id', (req, res) => {
-  const movie = movies.find(m => m.id === parseInt(req.params.id));
-  if (!movie) return res.status(404).send(notFoundMsg);
-
-  const index = movies.indexOf(movie);
-  movies.splice(index, 1);
-
-  res.send(movie);
+router.delete('/:id', async (req, res) => {
+  try {
+    const movie = await Movie.findByIdAndRemove(req.params.id);
+    if (!movie) return res.status(404).send(notFoundMsg);
+    return res.send(movie);
+  }
+  catch (ex) {
+    for (field in ex.errors) {
+      console.log(ex.errors[field].message);
+    }
+    return res.status(500).send(ex.errors);
+  }
 });
 
 module.exports = router;
