@@ -1,35 +1,6 @@
+const { Movie, validate } = require('../models/Movie');
 const express = require('express');
-const Joi = require('joi');
-const mongoose = require('mongoose');
-
-// Setup the router
 const router = express.Router();
-
-// helpers
-const validateMovie = (movie) => {
-  const schema = Joi.object({
-    genre: Joi.string().required(),
-    title: Joi.string().min(1).required(),
-  });
-
-  return schema.validate(movie);
-};
-
-// Schema
-const movieSchema = mongoose.Schema({
-  title: {
-    type: String,
-    required: true,
-    minLength: 5,
-    maxLength: 50,
-  },
-  genre: {
-    type: String,
-    required: true,
-    enum: ['action', 'adventure', 'comedy', 'drama', 'documentary', 'horror', 'thriller']
-  },
-});
-const Movie = mongoose.model('Movie', movieSchema);
 
 const notFoundMsg = 'The movie with the given ID was not found.';
 
@@ -58,7 +29,7 @@ router.get('/:id', async (req, res) => {
 
 // Create movie
 router.post('/', async (req, res) => {
-  const { error } = validateMovie(req.body);
+  const { error } = validate(req.body);
   if (error) return res.status(400).send(error.details[0].message);
 
   const movie = new Movie({
@@ -80,7 +51,7 @@ router.post('/', async (req, res) => {
 // Update movie
 router.put('/:id', async (req, res) => {
   try {
-    const { error } = validateMovie(req.body);
+    const { error } = validate(req.body);
     if (error) return res.status(400).send(error.details[0].message);
 
     const { title, genre } = req.body;
