@@ -6,6 +6,7 @@ const morgan = require('morgan');
 const logger = require('./middleware/logger');
 const homepage = require('./routes/homepage');
 const movies = require('./routes/movies');
+const mongoose = require('mongoose');
 
 // Create server
 const app = express();
