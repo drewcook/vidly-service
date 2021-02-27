@@ -75,6 +75,7 @@ router.put('/:id', auth, async (req, res) => {
 });
 
 // Delete genre
+// Must be an admin, use checkAdmin middleware
 router.delete('/:id', [auth, checkAdmin], async (req, res) => {
   try {
     const genre = await Genre.findByIdAndRemove(req.params.id);
