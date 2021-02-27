@@ -1,4 +1,5 @@
 const auth = require('../middleware/auth');
+const checkAdmin = require('../middleware/checkAdmin');
 const { Genre, validate } = require('../models/Genre');
 const express = require('express');
 const router = express.Router();
@@ -74,7 +75,7 @@ router.put('/:id', auth, async (req, res) => {
 });
 
 // Delete genre
-router.delete('/:id', auth, async (req, res) => {
+router.delete('/:id', [auth, checkAdmin], async (req, res) => {
   try {
     const genre = await Genre.findByIdAndRemove(req.params.id);
     if (!genre) return res.status(404).send(notFoundMsg);

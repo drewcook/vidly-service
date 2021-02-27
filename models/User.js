@@ -35,11 +35,14 @@ const userSchema = new mongoose.Schema({
     minLength: 5,
     maxLength: 255,
   },
+  isAdmin: Boolean,
 });
 
+// Setup a method right on the User schema so that all instances can call it.
+// This puts this in a centralized spot to maintin, but allows any instance to use it.
 userSchema.methods.generateAuthToken = function() {
   // set the auth in the response header so we can use it in the client
-  const token = jwt.sign({ _id: this._id }, config.get('jwtPrivateKey'));
+  const token = jwt.sign({ _id: this._id, isAdmin: this.isAdmin }, config.get('jwtPrivateKey'));
   return token;
 };
 
