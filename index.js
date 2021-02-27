@@ -1,3 +1,5 @@
+const Joi = require('Joi');
+Joi.objectId = require('joi-objectId')(Joi);
 const debug = require('debug')('vidly:startup');
 const config = require('config');
 const express = require('express');

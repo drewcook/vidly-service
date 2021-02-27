@@ -1,5 +1,4 @@
 const Joi = require('Joi');
-Joi.objectId = require('joi-objectId')(Joi);
 const mongoose = require('mongoose');
 
 const validateRental = (rental) => {
