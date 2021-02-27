@@ -1,5 +1,6 @@
 const { Movie, validate } = require('../models/Movie');
 const express = require('express');
+const { Genre } = require('../models/Genre');
 const router = express.Router();
 
 const notFoundMsg = 'The movie with the given ID was not found.';
@@ -28,12 +29,23 @@ router.get('/:id', async (req, res) => {
 });
 
 // Create movie
+// Embedding Genre within the Movie as subdocument
 router.post('/', async (req, res) => {
   const { error } = validate(req.body);
   if (error) return res.status(400).send(error.details[0].message);
 
+  const genre = await Genre.findById(req.body.genreId);
+  if (!genre) return res.status(400).send('Invalid genre.');
+
   const movie = new Movie({
-    ...req.body,
+    title: req.body.title,
+    // embedding, selectively set properties, not all
+    genre: {
+      _id: genre._id,
+      name: genre.name,
+    },
+    numberInStock: req.body.numberInStock,
+    dailyRentalRate: req.body.dailyRentalRate,
   });
 
   try {

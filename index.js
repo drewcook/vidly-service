@@ -5,6 +5,7 @@ const helmet = require('helmet');
 const morgan = require('morgan');
 const logger = require('./middleware/logger');
 const homepage = require('./routes/homepage');
+const genres = require('./routes/genres');
 const movies = require('./routes/movies');
 const customers = require('./routes/customers');
 const mongoose = require('mongoose');
@@ -44,6 +45,7 @@ app.use(helmet());  // sets headers for requests
 
 // Use routes
 app.use('/', homepage);
+app.use('/api/genres', genres);
 app.use('/api/movies', movies);
 app.use('/api/customers', customers);
 
