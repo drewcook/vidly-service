@@ -1,3 +1,4 @@
+const auth = require('../middleware/auth');
 const { Genre, validate } = require('../models/Genre');
 const express = require('express');
 const router = express.Router();
@@ -28,7 +29,8 @@ router.get('/:id', async (req, res) => {
 });
 
 // Create genre
-router.post('/', async (req, res) => {
+// authenticated endpoint
+router.post('/', auth, async (req, res) => {
   const { error } = validate(req.body);
   if (error) return res.status(400).send(error.details[0].message);
 
@@ -49,7 +51,7 @@ router.post('/', async (req, res) => {
 });
 
 // Update genre
-router.put('/:id', async (req, res) => {
+router.put('/:id', auth, async (req, res) => {
   try {
     const { error } = validate(req.body);
     if (error) return res.status(400).send(error.details[0].message);
@@ -72,7 +74,7 @@ router.put('/:id', async (req, res) => {
 });
 
 // Delete genre
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', auth, async (req, res) => {
   try {
     const genre = await Genre.findByIdAndRemove(req.params.id);
     if (!genre) return res.status(404).send(notFoundMsg);

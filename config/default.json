@@ -1,3 +1,4 @@
 {
-  "name": "My Vidly App"
+  "name": "My Vidly App",
+  "jwtPrivateKey": ""
 }
