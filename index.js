@@ -8,6 +8,7 @@ const homepage = require('./routes/homepage');
 const genres = require('./routes/genres');
 const movies = require('./routes/movies');
 const customers = require('./routes/customers');
+const rentals = require('./routes/rentals');
 const mongoose = require('mongoose');
 
 // Connect to the local mongoDB instance
@@ -43,11 +44,12 @@ app.use(express.static('public'));
 // 3rd Party Middleware
 app.use(helmet());  // sets headers for requests
 
-// Use routes
+// Setup API routes
 app.use('/', homepage);
 app.use('/api/genres', genres);
 app.use('/api/movies', movies);
 app.use('/api/customers', customers);
+app.use('/api/rentals', rentals);
 
 // Configuration
 debug(config)
@@ -67,3 +69,20 @@ app.use(logger);
 // Listen on server port for requests
 const port = process.env.PORT || 3000;
 app.listen(port, () => console.log(`Listening on port ${port}...`));
+
+// MongoDB ObjectId
+
+// _id: 6039c3bef9a0bf8a3238e3e2
+// 12 bytes (24 chars)
+  // 4 bytes: timestamp
+  // 3 bytes: machine identifier
+  // 2 bytes: process identifier
+  // 3 bytes: counter
+
+// 1 byte = 8 bits
+// 2^8 = 256 numbers can be stored in one byte
+// 2^24 = 16M
+// So ObjectIds are very unique!
+
+// MongoDB Driver -> MongoDB
+// Mongoose is an abstraction over MongoDB Driver, which creates the IDs

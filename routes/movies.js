@@ -1,6 +1,6 @@
 const { Movie, validate } = require('../models/Movie');
-const express = require('express');
 const { Genre } = require('../models/Genre');
+const express = require('express');
 const router = express.Router();
 
 const notFoundMsg = 'The movie with the given ID was not found.';
