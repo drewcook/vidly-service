@@ -21,7 +21,7 @@ const Joi = require('joi');
 */
 
 const setupApiValidation = () => {
-  Joi.objectId = require('joi-objectId')(Joi);
+  Joi.objectId = require('joi-objectid')(Joi);
 };
 
 module.exports = setupApiValidation;
