@@ -1,9 +1,10 @@
+const config = require('config');
 const mongoose = require('mongoose');
 const { logger } = require('../startup/logging');
 
 const setupDb = () => {
   // Connect to the local mongoDB instance
-  mongoose.connect(process.env.MONGODB_CONNECTION_STRING, {
+  mongoose.connect(config.get('MONGODB_CONNECTION_STRING'), {
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useFindAndModify: false,
