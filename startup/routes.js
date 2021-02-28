@@ -1,5 +1,4 @@
 const express = require('express');
-const helmet = require('helmet');
 const homepage = require('../routes/homepage');
 const genres = require('../routes/genres');
 const movies = require('../routes/movies');
@@ -17,9 +16,6 @@ const setupRoutes = (app) => {
   // uses a static folder for assets, and provides a route to view the assets
   // for example http://localhost:3000/public/readme.txt
   app.use(express.static('public'));
-
-  // 3rd Party Middleware
-  app.use(helmet());  // sets headers for requests
 
   // Setup API routes
   app.use('/', homepage);

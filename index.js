@@ -18,6 +18,10 @@ require('./startup/routes')(app);
 // Setup Joi validation for API
 require('./startup/apiValidation')();
 
+if (process.env.NODE_ENV === 'production') {
+  require('./startup/prod')(app);
+}
+
 // **** THIS ISN'T NECESSARY FOR API BACKENDS ONLY, but...
 // Set the templating engine to the pug package
 app.set('view engine', 'pug');
