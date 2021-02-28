@@ -1,5 +1,5 @@
 const helmet = require('helmet');
-const compression = require('compressions');
+const compression = require('compression');
 
 const setupProductionMiddleware = (app) => {
   // Sets headers for requests
