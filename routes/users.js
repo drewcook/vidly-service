@@ -10,7 +10,7 @@ router.get('/', async (req, res) => {
   res.send(users);
 });
 
-// get the current user
+// Get the current user
 // we protect this by having a custom endpoint that uses the JWT to get the user payload
 router.get('/me', auth, async (req, res) => {
   // rememver, we set req.user from our auth middleware
@@ -19,7 +19,8 @@ router.get('/me', auth, async (req, res) => {
   res.send(user);
 });
 
-router.post('/', auth, async (req, res) => {
+// Create a new user
+router.post('/', async (req, res) => {
   const { error } = validate(req.body);
   if (error) return res.status(400).send(error.details[0].message);
 
