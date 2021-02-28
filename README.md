@@ -1,3 +1,5 @@
+# Vidly Service
+This repository is an API built with Node.js and Express.js. It attempts to setup a mock scenario of handling movies at a movie rental store.  There are full RESTful endpoints setup, authentication, authorization, error handling, and logging.
 ## Prerequisites
 To run this service, you must have a local instance of both Node and MongoDB installed on your machine.
 ## Installing packages
