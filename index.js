@@ -19,7 +19,7 @@ require('./startup/routes')(app);
 require('./startup/apiValidation')();
 
 if (process.env.NODE_ENV === 'production') {
-  require('./startup/prod')(app);
+  require('./startup/productionMiddleware')(app);
 }
 
 // **** THIS ISN'T NECESSARY FOR API BACKENDS ONLY, but...
