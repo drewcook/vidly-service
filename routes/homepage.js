@@ -10,11 +10,4 @@ router.get('/', (req, res) => {
   });
 });
 
-router.get('/dogs', (req, res) => {
-  res.render('dogs', {
-    title: 'The Vidly App - Dogs',
-    message: 'Welcome to the dogs page.'
-  });
-});
-
 module.exports = router;
