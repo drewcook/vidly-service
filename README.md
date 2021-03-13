@@ -3,8 +3,8 @@ This repository is an API built with Node.js and Express.js. It attempts to setu
 ## Prerequisites
 To run this service, you must have a local instance of both Node and MongoDB installed on your machine.
 
-- [Install Node](https://nodejs.org)
-- [Install MongoDB](https://docs.mongodb.com/manual/administration/install-community/)
+- <a href="https://nodejs.org" target="_blank">Install Node</a>
+- <a href="https://docs.mongodb.com/manual/administration/install-community/" target="_blank">Install MongoDB</a>
 
 ## Installing packages
 You can use NPM to install the package dependencies for the application.  Run the following command:
