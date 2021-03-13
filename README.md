@@ -4,12 +4,16 @@ This repository is an API built with Node.js and Express.js. It attempts to setu
 To run this service, you must have a local instance of both Node and MongoDB installed on your machine.
 ## Installing packages
 You can use NPM to install the package dependencies for the application.  Run the following command:
-```
+```bash
 npm install
 ```
 ## Running the Service Locally
-To run the application, run the following command:
+Since generating a JWT relies on a secret to sign and verify against, export a variable that the app will understand to use for this secret key.  The name of the variable should be `VIDLY_APP_SECRET`.  First run the following:
+```bash
+export VIDLY_APP_SECRET=12345
 ```
+Then, to start the application, run the following command:
+```bash
 npm start
 ```
 This will spin up the server on `localhost:3000` attempt to make a connection to your local MongoDB instance.
