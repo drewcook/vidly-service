@@ -7,7 +7,14 @@ router.get('/', (req, res) => {
   res.render('index', {
     title: 'The Vidly App',
     message: 'Vidly Service API'
-  })
+  });
+});
+
+router.get('/dogs', (req, res) => {
+  res.render('dogs', {
+    title: 'The Vidly App - Dogs',
+    message: 'Welcome to the dogs page.'
+  });
 });
 
 module.exports = router;
