@@ -1,6 +1,6 @@
 const morgan = require('morgan');
 const winston = require('winston');
-require('winston-mongodb');
+// require('winston-mongodb');
 require('express-async-errors');
 
 const defaultTransports = [
@@ -28,17 +28,17 @@ const defaultTransports = [
     ),
   }),
   // - Addistionally, write all logs into our mongo db instance
-  new winston.transports.MongoDB({
-    level: 'error',
-    db: 'mongodb://localhost/vidly',
-    options: {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-      // useFindAndModify: false, // not supported at the moment
-      // useCreateIndex: true, // not supported at the moment
-    },
-    collection: 'logs',
-  }),
+  // new winston.transports.MongoDB({
+  //   level: 'error',
+  //   db: 'mongodb://localhost/vidly',
+  //   options: {
+  //     useNewUrlParser: true,
+  //     useUnifiedTopology: true,
+  //     // useFindAndModify: false, // not supported at the moment
+  //     // useCreateIndex: true, // not supported at the moment
+  //   },
+  //   collection: 'logs',
+  // }),
 ];
 
 const logger = winston.createLogger({
