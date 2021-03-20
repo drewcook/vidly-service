@@ -225,5 +225,13 @@ describe('/api/genres', () => {
       expect(res.body).toHaveProperty('_id');
       expect(res.body).toHaveProperty('name', 'genre1');
     });
+
+    it('should delete the genre if input is valid', async () => {
+      await exec();
+
+      const genreInDb = await Genre.findById(id);
+
+      expect(genreInDb).toBeNull();
+    });
   });
 });
