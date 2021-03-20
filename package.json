@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node index.js",
     "start:test": "NODE_ENV=test node index.js",
-    "test": "jest --watchAll --verbose",
+    "test": "jest --watchAll --verbose --coverage",
     "test:coverage": "jest --coverage --silent",
     "dev": "nodemon index.js"
   },
