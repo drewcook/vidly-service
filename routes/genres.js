@@ -1,7 +1,9 @@
 const auth = require('../middleware/auth');
 const checkAdmin = require('../middleware/checkAdmin');
+const validateObjectId = require('../middleware/validateObjectId');
 const { Genre, validate } = require('../models/Genre');
 const express = require('express');
+const mongoose = require('mongoose');
 const router = express.Router();
 
 const notFoundMsg = 'The genre with the given ID was not found.';
@@ -13,7 +15,7 @@ router.get('/', async (req, res) => {
 });
 
 // Get single genre
-router.get('/:id', async (req, res) => {
+router.get('/:id', validateObjectId, async (req, res) => {
   const genre = await Genre.findById(req.params.id);
   if (!genre) return res.status(404).send(notFoundMsg);
 
