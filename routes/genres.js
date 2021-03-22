@@ -1,7 +1,8 @@
 const auth = require('../middleware/auth');
 const checkAdmin = require('../middleware/checkAdmin');
+const validate = require('../middleware/validate');
 const validateObjectId = require('../middleware/validateObjectId');
-const { Genre, validate } = require('../models/Genre');
+const { Genre, validate: validateGenre } = require('../models/Genre');
 const express = require('express');
 const router = express.Router();
 
@@ -23,10 +24,7 @@ router.get('/:id', validateObjectId, async (req, res) => {
 
 // Create genre
 // authenticated endpoint
-router.post('/', auth, async (req, res) => {
-  const { error } = validate(req.body);
-  if (error) return res.status(400).send(error.details[0].message);
-
+router.post('/', [auth, validate(validateGenre)], async (req, res) => {
   const genre = new Genre({
     name: req.body.name,
   });
@@ -36,10 +34,7 @@ router.post('/', auth, async (req, res) => {
 });
 
 // Update genre
-router.put('/:id', auth, async (req, res) => {
-  const { error } = validate(req.body);
-  if (error) return res.status(400).send(error.details[0].message);
-
+router.put('/:id', [auth, validate(validateGenre)], async (req, res) => {
   const { name } = req.body;
   const updatedGenre = await Genre.findByIdAndUpdate(req.params.id, {
     $set: { name },

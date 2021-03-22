@@ -1,8 +1,9 @@
 const auth = require('../middleware/auth');
 const checkAdmin = require('../middleware/checkAdmin');
+const validate = require('../middleware/validate');
 const express = require('express');
 const router = express.Router();
-const { Customer, validate } = require('../models/Customer');
+const { Customer, validate: validateCustomer } = require('../models/Customer');
 
 const notFoundMsg = 'The customer with the given ID was not found.';
 
@@ -18,10 +19,7 @@ router.get('/:id', async (req, res) => {
   res.send(customer);
 });
 
-router.post('/', auth, async (req, res) => {
-  const { error } = validate(req.body);
-  if (error) return res.status(400).send(error.details);
-
+router.post('/', [auth, validate(validateCustomer)], async (req, res) => {
   const customer = new Customer({
     name: req.body.name,
     phone: req.body.phone,
@@ -37,10 +35,7 @@ router.post('/', auth, async (req, res) => {
   }
 });
 
-router.put('/:id', auth, async (req, res) => {
-  const { error } = validate(req.body);
-  if (error) return res.status(400).send(error.details);
-
+router.put('/:id', [auth, validate(validateCustomer)], async (req, res) => {
   const updated = await Customer.findByIdAndUpdate(req.params.id, {
     $set: {
       name: req.body.name,

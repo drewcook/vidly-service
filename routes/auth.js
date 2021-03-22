@@ -3,8 +3,9 @@ const Joi = require('joi');
 const bcrypt = require('bcrypt');
 const express = require('express');
 const router = express.Router();
+const validate = require('../middleware/validate');
 
-const validate = (request) => {
+const validateAuth = (request) => {
   const schema = Joi.object({
     email: Joi.string().required().min(5).max(255).email(),
     password: Joi.string().required().min(5).max(255),
@@ -13,11 +14,7 @@ const validate = (request) => {
   return schema.validate(request);
 };
 
-router.post('/', async (req, res) => {
-  // Check agasint Joi validation
-  const { error } = validate(req.body);
-  if (error) return res.status(400).send(error.details[0].message);
-
+router.post('/', validate(validateAuth), async (req, res) => {
   // Check if user exists, return vague message to client
   let user = await User.findOne({ email: req.body.email });
   if (!user) return res.status(400).send('Invalid email or password.');

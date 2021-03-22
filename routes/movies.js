@@ -1,6 +1,7 @@
 const auth = require('../middleware/auth');
 const checkAdmin = require('../middleware/checkAdmin');
-const { Movie, validate } = require('../models/Movie');
+const validate = require('../middleware/validate');
+const { Movie, validate: validateMovie } = require('../models/Movie');
 const { Genre } = require('../models/Genre');
 const express = require('express');
 const router = express.Router();
@@ -32,10 +33,7 @@ router.get('/:id', async (req, res) => {
 
 // Create movie
 // Embedding Genre within the Movie as subdocument
-router.post('/', auth, async (req, res) => {
-  const { error } = validate(req.body);
-  if (error) return res.status(400).send(error.details[0].message);
-
+router.post('/', [auth, validate(validateMovie)], async (req, res) => {
   const genre = await Genre.findById(req.body.genreId);
   if (!genre) return res.status(400).send('Invalid genre.');
 
@@ -63,11 +61,8 @@ router.post('/', auth, async (req, res) => {
 });
 
 // Update movie
-router.put('/:id', auth, async (req, res) => {
+router.put('/:id', [auth, validate(validateMovie)], async (req, res) => {
   try {
-    const { error } = validate(req.body);
-    if (error) return res.status(400).send(error.details[0].message);
-
     const { title, genre } = req.body;
     const updatedMovie = await Movie.findByIdAndUpdate(req.params.id, {
       $set: { title, genre },

@@ -1,5 +1,6 @@
  const auth = require('../middleware/auth');
-const { Rental, validate } = require('../models/Rental');
+const validate = require('../middleware/validate');
+const { Rental, validate: validateRental } = require('../models/Rental');
 const { Customer } = require('../models/Customer');
 const { Movie } = require('../models/Movie');
 const Fawn = require('fawn');
@@ -21,10 +22,7 @@ router.get('/', async (req, res) => {
 });
 
 // Create new rental
-router.post('/', auth, async (req, res) => {
-  const { error } = validate(req.body);
-  if (error) return res.status(400).send(error.details[0].message);
-
+router.post('/', [auth, validate(validateRental)], async (req, res) => {
   const customer = await Customer.findById(req.body.customerId);
   if (!customer) return res.status(404).send('Customer with given ID not found.');
 
