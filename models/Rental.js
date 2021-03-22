@@ -10,7 +10,7 @@ const validateRental = (rental) => {
   return schema.validate(rental);
 };
 
-const Rental = mongoose.model('Rental', new mongoose.Schema({
+const rentalSchema = new mongoose.Schema({
   // We may not want to use customerSchema and/or movieSchema
   // It could have 40 properties, so we create our own shema here.
   // We will populate this customer from customer data when POSTing.
@@ -65,7 +65,18 @@ const Rental = mongoose.model('Rental', new mongoose.Schema({
     type: Number,
     min: 0,
   },
-}));
+});
+
+// Create a static method to easily lookup the rental
+// Cannot use arrow function to access 'this'
+rentalSchema.statics.lookup = function({ customerId, movieId }) {
+  return this.findOne({
+    'customer._id': customerId,
+    'movie._id': movieId,
+  });
+};
+
+const Rental = mongoose.model('Rental', rentalSchema);
 
 module.exports = {
   Rental,
