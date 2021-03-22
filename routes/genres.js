@@ -3,7 +3,6 @@ const checkAdmin = require('../middleware/checkAdmin');
 const validateObjectId = require('../middleware/validateObjectId');
 const { Genre, validate } = require('../models/Genre');
 const express = require('express');
-const mongoose = require('mongoose');
 const router = express.Router();
 
 const notFoundMsg = 'The genre with the given ID was not found.';
