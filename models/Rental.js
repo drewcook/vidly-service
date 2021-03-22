@@ -1,5 +1,6 @@
 const Joi = require('joi');
 const mongoose = require('mongoose');
+const { differenceInDays } = require('date-fns');
 
 const validateRental = (rental) => {
   const schema = Joi.object({
@@ -74,6 +75,16 @@ rentalSchema.statics.lookup = function({ customerId, movieId }) {
     'customer._id': customerId,
     'movie._id': movieId,
   });
+};
+
+rentalSchema.methods.return = function() {
+  // set return date
+  this.dateReturned = new Date();
+
+  // calculate rental fee
+  // charge minimum 1 day if within 24 hours
+  const rentalDays = differenceInDays(this.dateReturned, this.dateOut);
+  this.rentalFee = rentalDays < 1 ? this.movie.dailyRentalRate : this.movie.dailyRentalRate * rentalDays;
 };
 
 const Rental = mongoose.model('Rental', rentalSchema);
